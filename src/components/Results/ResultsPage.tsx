@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react";
 import { RecommendationPanel } from "./RecommendationPanel";
-import { MapPanel } from "./MapPanel";
+import { GoogleMapPanel } from "./GoogleMapPanel";
 import { TravelFormData } from "../TravelForm/TravelFormPage";
 import { Button } from "@/components/ui/button";
 import { RefreshCw, Download, ArrowLeft } from "lucide-react";
 import beachBg from "@/assets/beach-bg.jpg";
 import { toast } from "sonner";
 
-// Helper function to determine destination from formData
-const getDestination = (formData: TravelFormData): string => {
+// Helper function to determine destination and coordinates from formData
+const getDestinationData = (formData: TravelFormData): { destination: string; lat: number; lng: number } => {
   if (formData.destination) {
-    return formData.destination;
+    return { destination: formData.destination, lat: 0, lng: 0 };
   }
 
   // Generate destination based on preferences - must match RecommendationPanel logic
@@ -21,13 +21,13 @@ const getDestination = (formData: TravelFormData): string => {
   const hasFood = formData.preferences.includes("food");
   const hasRoadTrip = formData.preferences.includes("roadtrip");
 
-  if (hasBeach && hasRelaxed) return "Maldives";
-  if (hasCity && hasCultural) return "Rome, Italy";
-  if (hasFood && hasCultural) return "Bangkok, Thailand";
-  if (hasRoadTrip) return "Iceland";
-  if (hasCity) return "Barcelona, Spain";
+  if (hasBeach && hasRelaxed) return { destination: "Malé, Maldives", lat: 4.1755, lng: 73.5093 };
+  if (hasCity && hasCultural) return { destination: "Rome, Italy", lat: 41.9028, lng: 12.4964 };
+  if (hasFood && hasCultural) return { destination: "Bangkok, Thailand", lat: 13.7563, lng: 100.5018 };
+  if (hasRoadTrip) return { destination: "Reykjavík, Iceland", lat: 64.1466, lng: -21.9426 };
+  if (hasCity) return { destination: "Barcelona, Spain", lat: 41.3874, lng: 2.1686 };
   
-  return "Seattle, USA"; // Default
+  return { destination: "Seattle, USA", lat: 47.6062, lng: -122.3321 }; // Default
 };
 
 export const ResultsPage = ({ 
@@ -40,14 +40,14 @@ export const ResultsPage = ({
   onRegenerate: () => void;
 }) => {
   const [isGenerating, setIsGenerating] = useState(true);
-  const [currentDestination, setCurrentDestination] = useState<string>("");
+  const [destinationData, setDestinationData] = useState({ destination: "", lat: 0, lng: 0 });
 
   // Simulate AI generation and set destination
   useEffect(() => {
     setIsGenerating(true);
     const timer = setTimeout(() => {
       setIsGenerating(false);
-      setCurrentDestination(getDestination(formData));
+      setDestinationData(getDestinationData(formData));
     }, 3000);
     return () => clearTimeout(timer);
   }, [formData]);
@@ -112,7 +112,11 @@ export const ResultsPage = ({
 
         {/* Right Column - Map */}
         <div className="w-[45%] min-w-[400px]">
-          <MapPanel destination={currentDestination} />
+          <GoogleMapPanel 
+            destination={destinationData.destination}
+            lat={destinationData.lat}
+            lng={destinationData.lng}
+          />
         </div>
       </div>
     </div>
