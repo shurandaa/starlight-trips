@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { RecommendationPanel } from "./RecommendationPanel";
 import { MapPanel } from "./MapPanel";
 import { TravelFormData } from "../TravelForm/TravelFormPage";
@@ -6,6 +6,29 @@ import { Button } from "@/components/ui/button";
 import { RefreshCw, Download, ArrowLeft } from "lucide-react";
 import beachBg from "@/assets/beach-bg.jpg";
 import { toast } from "sonner";
+
+// Helper function to determine destination from formData
+const getDestination = (formData: TravelFormData): string => {
+  if (formData.destination) {
+    return formData.destination;
+  }
+
+  // Generate destination based on preferences - must match RecommendationPanel logic
+  const hasRelaxed = formData.preferences.includes("relaxed");
+  const hasBeach = formData.preferences.includes("beach");
+  const hasCity = formData.preferences.includes("city");
+  const hasCultural = formData.preferences.includes("cultural");
+  const hasFood = formData.preferences.includes("food");
+  const hasRoadTrip = formData.preferences.includes("roadtrip");
+
+  if (hasBeach && hasRelaxed) return "Maldives";
+  if (hasCity && hasCultural) return "Rome, Italy";
+  if (hasFood && hasCultural) return "Bangkok, Thailand";
+  if (hasRoadTrip) return "Iceland";
+  if (hasCity) return "Barcelona, Spain";
+  
+  return "Seattle, USA"; // Default
+};
 
 export const ResultsPage = ({ 
   formData, 
@@ -17,11 +40,17 @@ export const ResultsPage = ({
   onRegenerate: () => void;
 }) => {
   const [isGenerating, setIsGenerating] = useState(true);
+  const [currentDestination, setCurrentDestination] = useState<string>("");
 
-  // Simulate AI generation
-  useState(() => {
-    setTimeout(() => setIsGenerating(false), 3000);
-  });
+  // Simulate AI generation and set destination
+  useEffect(() => {
+    setIsGenerating(true);
+    const timer = setTimeout(() => {
+      setIsGenerating(false);
+      setCurrentDestination(getDestination(formData));
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, [formData]);
 
   const handleExportPDF = () => {
     toast.success("PDF export coming soon! 📄");
@@ -83,7 +112,7 @@ export const ResultsPage = ({
 
         {/* Right Column - Map */}
         <div className="w-[45%] min-w-[400px]">
-          <MapPanel destination={formData.destination || "Paris"} />
+          <MapPanel destination={currentDestination} />
         </div>
       </div>
     </div>
