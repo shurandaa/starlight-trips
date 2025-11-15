@@ -38,9 +38,9 @@ const generateRecommendation = (formData: TravelFormData) => {
       bestSeason = "November - April";
       suggestedDates = formData.startDate ? new Date(formData.startDate).toLocaleDateString() : "December - March (Dry Season)";
       placesOfInterest = [
-        { name: "Conrad Maldives Rangali Island", city: "Maldives", description: "Luxury resort with underwater restaurant" },
-        { name: "Veligandu Island Beach", city: "Maldives", description: "Pristine white sand beach paradise" },
-        { name: "Banana Reef", city: "Maldives", description: "World-class diving and snorkeling spot" }
+        { name: "Conrad Maldives Rangali Island", city: "Rangali Island, Maldives", description: "Luxury resort with underwater restaurant" },
+        { name: "Veligandu Island Beach", city: "Veligandu Island, Maldives", description: "Pristine white sand beach paradise" },
+        { name: "Banana Reef", city: "North Male Atoll, Maldives", description: "World-class diving and snorkeling spot" }
       ];
       highlights = [
         "Stay in an overwater villa with direct lagoon access",
@@ -68,9 +68,9 @@ const generateRecommendation = (formData: TravelFormData) => {
       bestSeason = "April - May, September - October";
       suggestedDates = formData.startDate ? new Date(formData.startDate).toLocaleDateString() : "April - May (Spring)";
       placesOfInterest = [
-        { name: "Colosseum", city: "Rome", description: "Ancient amphitheater and iconic landmark" },
-        { name: "Vatican Museums", city: "Rome", description: "Home to Sistine Chapel and Renaissance masterpieces" },
-        { name: "Trevi Fountain", city: "Rome", description: "Baroque fountain and romantic symbol of Rome" }
+        { name: "Colosseum", city: "Rome, Italy", description: "Ancient amphitheater and iconic landmark" },
+        { name: "Vatican Museums", city: "Vatican City, Rome, Italy", description: "Home to Sistine Chapel and Renaissance masterpieces" },
+        { name: "Trevi Fountain", city: "Rome, Italy", description: "Baroque fountain and romantic symbol of Rome" }
       ];
       highlights = [
         "Tour the iconic Colosseum and Roman Forum",
@@ -98,9 +98,9 @@ const generateRecommendation = (formData: TravelFormData) => {
       bestSeason = "November - February";
       suggestedDates = formData.startDate ? new Date(formData.startDate).toLocaleDateString() : "December - February (Cool Season)";
       placesOfInterest = [
-        { name: "Grand Palace", city: "Bangkok", description: "Ornate royal temple complex" },
-        { name: "Yaowarat Road", city: "Bangkok", description: "Legendary Chinatown street food haven" },
-        { name: "Damnoen Saduak Floating Market", city: "Bangkok", description: "Traditional floating market experience" }
+        { name: "Grand Palace", city: "Bangkok, Thailand", description: "Ornate royal temple complex" },
+        { name: "Yaowarat Road", city: "Bangkok, Thailand", description: "Legendary Chinatown street food haven" },
+        { name: "Damnoen Saduak Floating Market", city: "Ratchaburi, Thailand", description: "Traditional floating market experience" }
       ];
       highlights = [
         "Street food tour in legendary Chinatown (Yaowarat Road)",
@@ -128,9 +128,9 @@ const generateRecommendation = (formData: TravelFormData) => {
       bestSeason = "June - August (Summer), September - March (Northern Lights)";
       suggestedDates = formData.startDate ? new Date(formData.startDate).toLocaleDateString() : "July - August (Midnight Sun)";
       placesOfInterest = [
-        { name: "Geysir", city: "Reykjavík", description: "Active geyser on the Golden Circle" },
-        { name: "Blue Lagoon", city: "Reykjavík", description: "World-famous geothermal spa" },
-        { name: "Black Sand Beach Reynisfjara", city: "Vík", description: "Dramatic volcanic black sand beach" }
+        { name: "Geysir", city: "Haukadalur, Iceland", description: "Active geyser on the Golden Circle" },
+        { name: "Blue Lagoon", city: "Grindavík, Iceland", description: "World-famous geothermal spa" },
+        { name: "Black Sand Beach Reynisfjara", city: "Vík, Iceland", description: "Dramatic volcanic black sand beach" }
       ];
       highlights = [
         "Drive the legendary Golden Circle route (Geysir, Gullfoss)",
@@ -158,9 +158,9 @@ const generateRecommendation = (formData: TravelFormData) => {
       bestSeason = "May - June, September - October";
       suggestedDates = formData.startDate ? new Date(formData.startDate).toLocaleDateString() : "May - June (Late Spring)";
       placesOfInterest = [
-        { name: "Sagrada Familia", city: "Barcelona", description: "Gaudí's iconic unfinished basilica" },
-        { name: "Park Güell", city: "Barcelona", description: "Colorful mosaic park designed by Gaudí" },
-        { name: "La Boqueria Market", city: "Barcelona", description: "Historic food market on Las Ramblas" }
+        { name: "Sagrada Familia", city: "Barcelona, Spain", description: "Gaudí's iconic unfinished basilica" },
+        { name: "Park Güell", city: "Barcelona, Spain", description: "Colorful mosaic park designed by Gaudí" },
+        { name: "La Boqueria Market", city: "Barcelona, Spain", description: "Historic food market on Las Ramblas" }
       ];
       highlights = [
         "Visit the iconic Sagrada Familia and Park Güell",
@@ -188,9 +188,9 @@ const generateRecommendation = (formData: TravelFormData) => {
       bestSeason = "June - September";
       suggestedDates = formData.startDate ? new Date(formData.startDate).toLocaleDateString() : "July - August (Summer)";
       placesOfInterest = [
-        { name: "Pike Place Market", city: "Seattle", description: "Historic public market and cultural landmark" },
-        { name: "Space Needle", city: "Seattle", description: "Iconic observation tower with stunning views" },
-        { name: "Chihuly Garden and Glass", city: "Seattle", description: "Stunning glass art museum" }
+        { name: "Pike Place Market", city: "Seattle, Washington, USA", description: "Historic public market and cultural landmark" },
+        { name: "Space Needle", city: "Seattle, Washington, USA", description: "Iconic observation tower with stunning views" },
+        { name: "Chihuly Garden and Glass", city: "Seattle, Washington, USA", description: "Stunning glass art museum" }
       ];
       highlights = [
         "Explore the bustling Pike Place Market and watch fish flying",
