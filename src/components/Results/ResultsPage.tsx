@@ -77,9 +77,9 @@ const getDestinationPlaces = (formData: TravelFormData) => {
   return {
     destination: "Seattle",
     places: [
-      { name: "Pike Place Market", city: "Seattle", description: "Historic public market and cultural landmark" },
-      { name: "Space Needle", city: "Seattle", description: "Iconic observation tower with stunning views" },
-      { name: "Chihuly Garden and Glass", city: "Seattle", description: "Stunning glass art museum" }
+      { name: "Pike Place Market", city: "Seattle, Washington, USA", description: "Historic public market and cultural landmark" },
+      { name: "Space Needle", city: "Seattle, Washington, USA", description: "Iconic observation tower with stunning views" },
+      { name: "Chihuly Garden and Glass", city: "Seattle, Washington, USA", description: "Stunning glass art museum" }
     ]
   };
 };
