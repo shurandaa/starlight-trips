@@ -1,13 +1,46 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from "react";
+import { AuthPage } from "@/components/Auth/AuthPage";
+import { TravelFormPage, TravelFormData } from "@/components/TravelForm/TravelFormPage";
+import { ResultsPage } from "@/components/Results/ResultsPage";
+
+type AppState = "auth" | "form" | "results";
 
 const Index = () => {
+  const [appState, setAppState] = useState<AppState>("auth");
+  const [travelData, setTravelData] = useState<TravelFormData | null>(null);
+
+  const handleAuthSuccess = () => {
+    setAppState("form");
+  };
+
+  const handleGenerate = (data: TravelFormData) => {
+    setTravelData(data);
+    setAppState("results");
+  };
+
+  const handleBack = () => {
+    setAppState("form");
+  };
+
+  const handleRegenerate = () => {
+    // Trigger regeneration with same data
+    if (travelData) {
+      handleGenerate(travelData);
+    }
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
-    </div>
+    <>
+      {appState === "auth" && <AuthPage onAuthSuccess={handleAuthSuccess} />}
+      {appState === "form" && <TravelFormPage onGenerate={handleGenerate} />}
+      {appState === "results" && travelData && (
+        <ResultsPage 
+          formData={travelData} 
+          onBack={handleBack}
+          onRegenerate={handleRegenerate}
+        />
+      )}
+    </>
   );
 };
 
