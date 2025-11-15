@@ -1,10 +1,16 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { LoginTab } from "./LoginTab";
 import { RegisterTab } from "./RegisterTab";
 import cityBg from "@/assets/city-bg.jpg";
 
-export const AuthPage = ({ onAuthSuccess }: { onAuthSuccess: () => void }) => {
+export const AuthPage = () => {
   const [activeTab, setActiveTab] = useState<"login" | "register">("login");
+  const navigate = useNavigate();
+
+  const handleSuccess = () => {
+    navigate("/");
+  };
 
   return (
     <div className="min-h-screen w-full relative overflow-hidden flex items-center justify-center p-4">
@@ -72,14 +78,14 @@ export const AuthPage = ({ onAuthSuccess }: { onAuthSuccess: () => void }) => {
                 activeTab === "login" ? "translate-x-0" : "-translate-x-full opacity-0 absolute inset-0"
               }`}
             >
-              <LoginTab onSuccess={onAuthSuccess} />
+              <LoginTab onSuccess={handleSuccess} />
             </div>
             <div
               className={`transition-all duration-500 ease-out ${
                 activeTab === "register" ? "translate-x-0" : "translate-x-full opacity-0 absolute inset-0"
               }`}
             >
-              <RegisterTab onSuccess={onAuthSuccess} />
+              <RegisterTab onSuccess={handleSuccess} />
             </div>
           </div>
         </div>

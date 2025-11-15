@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { BasicInfoTab } from "./BasicInfoTab";
 import { PreferencesTab } from "./PreferencesTab";
 import { TravelerDetailsTab } from "./TravelerDetailsTab";
+import { ProfileSettingsSheet } from "@/components/ProfileSettings/ProfileSettingsSheet";
 import { Sparkles } from "lucide-react";
 import mountainBg from "@/assets/mountain-bg.jpg";
 
@@ -45,13 +46,18 @@ export const TravelFormPage = ({ onGenerate }: { onGenerate: (data: TravelFormDa
       {/* Main Form Card */}
       <div className="relative z-10 w-full max-w-4xl my-8">
         <div className="glass-card rounded-3xl p-8 shadow-2xl glow animate-fade-in">
-          <div className="mb-8 text-center">
-            <h1 className="text-4xl font-bold mb-2 text-glow bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-              Plan Your Dream Trip
-            </h1>
-            <p className="text-muted-foreground">
-              Tell us your preferences and let AI create the perfect itinerary
-            </p>
+          <div className="mb-8">
+            <div className="flex justify-end mb-4">
+              <ProfileSettingsSheet />
+            </div>
+            <div className="text-center">
+              <h1 className="text-4xl font-bold mb-2 text-glow bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
+                Plan Your Dream Trip
+              </h1>
+              <p className="text-muted-foreground">
+                Tell us your preferences and let AI create the perfect itinerary
+              </p>
+            </div>
           </div>
 
           <Tabs defaultValue="basic" className="w-full">
