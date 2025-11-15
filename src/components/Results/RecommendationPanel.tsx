@@ -17,8 +17,7 @@ const generateRecommendation = (formData: TravelFormData) => {
   let suggestedDates = "";
   let highlights: string[] = [];
   let alerts: string[] = [];
-  let lat = 0;
-  let lng = 0;
+  let placesOfInterest: Array<{ name: string; city: string; description: string }> = [];
   let alternatives: { name: string; country: string; matchScore: number; highlight: string }[] = [];
 
   if (!destination) {
@@ -31,15 +30,18 @@ const generateRecommendation = (formData: TravelFormData) => {
     const hasRoadTrip = formData.preferences.includes("roadtrip");
 
     if (hasBeach && hasRelaxed) {
-      destination = "Malé";
+      destination = "Maldives";
       country = "Maldives";
       description = "A tropical paradise with crystal-clear turquoise waters and pristine white-sand beaches.";
       whyThisLocation = "Your preferences for relaxed vacation and beach activities make the Maldives an ideal choice. With over 1,000 coral islands, it offers unparalleled snorkeling, luxurious overwater bungalows, and the perfect setting for unwinding in paradise.";
       matchScore = 98;
       bestSeason = "November - April";
       suggestedDates = formData.startDate ? new Date(formData.startDate).toLocaleDateString() : "December - March (Dry Season)";
-      lat = 4.1755;
-      lng = 73.5093;
+      placesOfInterest = [
+        { name: "Conrad Maldives Rangali Island", city: "Maldives", description: "Luxury resort with underwater restaurant" },
+        { name: "Veligandu Island Beach", city: "Maldives", description: "Pristine white sand beach paradise" },
+        { name: "Banana Reef", city: "Maldives", description: "World-class diving and snorkeling spot" }
+      ];
       highlights = [
         "Stay in an overwater villa with direct lagoon access",
         "Snorkeling in pristine coral reefs with tropical fish",
@@ -65,8 +67,11 @@ const generateRecommendation = (formData: TravelFormData) => {
       matchScore = 97;
       bestSeason = "April - May, September - October";
       suggestedDates = formData.startDate ? new Date(formData.startDate).toLocaleDateString() : "April - May (Spring)";
-      lat = 41.9028;
-      lng = 12.4964;
+      placesOfInterest = [
+        { name: "Colosseum", city: "Rome", description: "Ancient amphitheater and iconic landmark" },
+        { name: "Vatican Museums", city: "Rome", description: "Home to Sistine Chapel and Renaissance masterpieces" },
+        { name: "Trevi Fountain", city: "Rome", description: "Baroque fountain and romantic symbol of Rome" }
+      ];
       highlights = [
         "Tour the iconic Colosseum and Roman Forum",
         "Marvel at the Sistine Chapel in Vatican Museums",
@@ -92,8 +97,11 @@ const generateRecommendation = (formData: TravelFormData) => {
       matchScore = 96;
       bestSeason = "November - February";
       suggestedDates = formData.startDate ? new Date(formData.startDate).toLocaleDateString() : "December - February (Cool Season)";
-      lat = 13.7563;
-      lng = 100.5018;
+      placesOfInterest = [
+        { name: "Grand Palace", city: "Bangkok", description: "Ornate royal temple complex" },
+        { name: "Yaowarat Road", city: "Bangkok", description: "Legendary Chinatown street food haven" },
+        { name: "Damnoen Saduak Floating Market", city: "Bangkok", description: "Traditional floating market experience" }
+      ];
       highlights = [
         "Street food tour in legendary Chinatown (Yaowarat Road)",
         "Visit the Grand Palace and Wat Phra Kaew temple complex",
@@ -119,8 +127,11 @@ const generateRecommendation = (formData: TravelFormData) => {
       matchScore = 97;
       bestSeason = "June - August (Summer), September - March (Northern Lights)";
       suggestedDates = formData.startDate ? new Date(formData.startDate).toLocaleDateString() : "July - August (Midnight Sun)";
-      lat = 64.1466;
-      lng = -21.9426;
+      placesOfInterest = [
+        { name: "Geysir", city: "Reykjavík", description: "Active geyser on the Golden Circle" },
+        { name: "Blue Lagoon", city: "Reykjavík", description: "World-famous geothermal spa" },
+        { name: "Black Sand Beach Reynisfjara", city: "Vík", description: "Dramatic volcanic black sand beach" }
+      ];
       highlights = [
         "Drive the legendary Golden Circle route (Geysir, Gullfoss)",
         "Chase the magical Northern Lights (September-March)",
@@ -146,8 +157,11 @@ const generateRecommendation = (formData: TravelFormData) => {
       matchScore = 96;
       bestSeason = "May - June, September - October";
       suggestedDates = formData.startDate ? new Date(formData.startDate).toLocaleDateString() : "May - June (Late Spring)";
-      lat = 41.3874;
-      lng = 2.1686;
+      placesOfInterest = [
+        { name: "Sagrada Familia", city: "Barcelona", description: "Gaudí's iconic unfinished basilica" },
+        { name: "Park Güell", city: "Barcelona", description: "Colorful mosaic park designed by Gaudí" },
+        { name: "La Boqueria Market", city: "Barcelona", description: "Historic food market on Las Ramblas" }
+      ];
       highlights = [
         "Visit the iconic Sagrada Familia and Park Güell",
         "Stroll down the famous Las Ramblas boulevard",
@@ -173,8 +187,11 @@ const generateRecommendation = (formData: TravelFormData) => {
       matchScore = 95;
       bestSeason = "June - September";
       suggestedDates = formData.startDate ? new Date(formData.startDate).toLocaleDateString() : "July - August (Summer)";
-      lat = 47.6062;
-      lng = -122.3321;
+      placesOfInterest = [
+        { name: "Pike Place Market", city: "Seattle", description: "Historic public market and cultural landmark" },
+        { name: "Space Needle", city: "Seattle", description: "Iconic observation tower with stunning views" },
+        { name: "Chihuly Garden and Glass", city: "Seattle", description: "Stunning glass art museum" }
+      ];
       highlights = [
         "Explore the bustling Pike Place Market and watch fish flying",
         "Visit the Space Needle and stunning Chihuly Garden and Glass",
@@ -202,8 +219,11 @@ const generateRecommendation = (formData: TravelFormData) => {
     matchScore = 90;
     bestSeason = "Year-round";
     suggestedDates = formData.startDate ? new Date(formData.startDate).toLocaleDateString() : "Flexible dates";
-    lat = 0;
-    lng = 0;
+    placesOfInterest = [
+      { name: `Main Attraction in ${destination}`, city: destination, description: "Top landmark to visit" },
+      { name: `Historic Site in ${destination}`, city: destination, description: "Cultural heritage location" },
+      { name: `Local Market in ${destination}`, city: destination, description: "Authentic local experience" }
+    ];
     highlights = [
       `Explore top attractions in ${destination}`,
       "Experience local cuisine and culture",
@@ -236,8 +256,7 @@ const generateRecommendation = (formData: TravelFormData) => {
     suggestedDates,
     highlights,
     alerts,
-    lat,
-    lng,
+    placesOfInterest,
     alternatives,
     travelStyles,
     budgetBreakdown: {
@@ -289,6 +308,27 @@ export const RecommendationPanel = ({
       
       {/* Alternative Destinations */}
       <AlternativeDestinations alternatives={recommendation.alternatives} />
+
+      {/* Places of Interest */}
+      <Card className="glass-card rounded-2xl border-0 animate-fade-in">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Sparkles className="w-5 h-5 text-primary" />
+            Places to Visit
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          {recommendation.placesOfInterest?.map((place, index) => (
+            <div 
+              key={index}
+              className="p-4 rounded-xl bg-background/50 hover:bg-background/80 transition-all border border-border/50"
+            >
+              <h4 className="font-semibold text-foreground">{place.name}</h4>
+              <p className="text-sm text-muted-foreground mt-1">{place.description}</p>
+            </div>
+          ))}
+        </CardContent>
+      </Card>
 
       {/* Trip Details Grid */}
       <div className="grid gap-4 md:grid-cols-2">
