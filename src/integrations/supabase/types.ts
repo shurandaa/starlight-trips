@@ -14,7 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          created_at: string
+          date_of_birth: string | null
+          dietary_restrictions: string[] | null
+          emergency_contact_name: string | null
+          emergency_contact_phone: string | null
+          id: string
+          nationality: string | null
+          passport_expiry: string | null
+          passport_number: string | null
+          updated_at: string
+          user_id: string
+          visa_type: string | null
+        }
+        Insert: {
+          created_at?: string
+          date_of_birth?: string | null
+          dietary_restrictions?: string[] | null
+          emergency_contact_name?: string | null
+          emergency_contact_phone?: string | null
+          id?: string
+          nationality?: string | null
+          passport_expiry?: string | null
+          passport_number?: string | null
+          updated_at?: string
+          user_id: string
+          visa_type?: string | null
+        }
+        Update: {
+          created_at?: string
+          date_of_birth?: string | null
+          dietary_restrictions?: string[] | null
+          emergency_contact_name?: string | null
+          emergency_contact_phone?: string | null
+          id?: string
+          nationality?: string | null
+          passport_expiry?: string | null
+          passport_number?: string | null
+          updated_at?: string
+          user_id?: string
+          visa_type?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
