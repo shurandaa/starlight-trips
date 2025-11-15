@@ -1,15 +1,25 @@
 import { TravelFormData } from "../TravelForm/TravelFormPage";
-import { MapPin, DollarSign, Calendar, Users, AlertTriangle, Star, Sparkles } from "lucide-react";
+import { DollarSign, AlertTriangle, Star, Sparkles } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { DestinationCard } from "./DestinationCard";
+import { AlternativeDestinations } from "./AlternativeDestinations";
+import { TripOverview } from "./TripOverview";
 
 // Generate dynamic recommendation based on user preferences
 const generateRecommendation = (formData: TravelFormData) => {
   // Determine destination based on preferences
   let destination = formData.destination;
-  let reason = "";
+  let country = "";
+  let description = "";
+  let whyThisLocation = "";
+  let matchScore = 95;
+  let bestSeason = "";
+  let suggestedDates = "";
   let highlights: string[] = [];
   let alerts: string[] = [];
+  let lat = 0;
+  let lng = 0;
+  let alternatives: { name: string; country: string; matchScore: number; highlight: string }[] = [];
 
   if (!destination) {
     // AI-like destination selection based on preferences
@@ -21,99 +31,179 @@ const generateRecommendation = (formData: TravelFormData) => {
     const hasRoadTrip = formData.preferences.includes("roadtrip");
 
     if (hasBeach && hasRelaxed) {
-      destination = "Maldives";
-      reason = "Perfect for a relaxed beach vacation with crystal-clear waters and overwater bungalows.";
+      destination = "Malé";
+      country = "Maldives";
+      description = "A tropical paradise with crystal-clear turquoise waters and pristine white-sand beaches.";
+      whyThisLocation = "Your preferences for relaxed vacation and beach activities make the Maldives an ideal choice. With over 1,000 coral islands, it offers unparalleled snorkeling, luxurious overwater bungalows, and the perfect setting for unwinding in paradise.";
+      matchScore = 98;
+      bestSeason = "November - April";
+      suggestedDates = formData.startDate ? new Date(formData.startDate).toLocaleDateString() : "December - March (Dry Season)";
+      lat = 4.1755;
+      lng = 73.5093;
       highlights = [
-        "Stay in an overwater villa",
-        "Snorkeling in pristine coral reefs",
+        "Stay in an overwater villa with direct lagoon access",
+        "Snorkeling in pristine coral reefs with tropical fish",
         "Sunset dolphin watching cruise",
-        "Private beach dinners",
-        "Spa treatments with ocean views"
+        "Private beach dinners under the stars",
+        "World-class spa treatments with ocean views"
       ];
       alerts = [
-        "Best weather November to April",
-        "Book resorts 4-6 months in advance",
-        "Some islands require seaplane transfers"
+        "Best weather November to April (dry season)",
+        "Book luxury resorts 4-6 months in advance",
+        "Some islands require seaplane transfers (additional cost)",
+        "Alcohol only available at resort islands"
+      ];
+      alternatives = [
+        { name: "Bora Bora", country: "French Polynesia", matchScore: 96, highlight: "Similar luxury with overwater bungalows" },
+        { name: "Seychelles", country: "East Africa", matchScore: 94, highlight: "Pristine beaches with granite boulders" }
       ];
     } else if (hasCity && hasCultural) {
-      destination = "Rome, Italy";
-      reason = "Ideal for culture enthusiasts who want to explore ancient history and vibrant city life.";
+      destination = "Rome";
+      country = "Italy";
+      description = "The Eternal City, where ancient ruins meet Renaissance masterpieces and world-class cuisine.";
+      whyThisLocation = "Rome perfectly matches your cultural interests and city exploration preferences. Walk through 2,000 years of history, from the Colosseum to the Vatican, while enjoying authentic Italian cuisine at every corner.";
+      matchScore = 97;
+      bestSeason = "April - May, September - October";
+      suggestedDates = formData.startDate ? new Date(formData.startDate).toLocaleDateString() : "April - May (Spring)";
+      lat = 41.9028;
+      lng = 12.4964;
       highlights = [
-        "Tour the Colosseum and Roman Forum",
-        "Visit Vatican Museums and Sistine Chapel",
-        "Explore Trastevere neighborhood",
-        "Enjoy authentic Italian cuisine",
-        "Throw a coin in Trevi Fountain"
+        "Tour the iconic Colosseum and Roman Forum",
+        "Marvel at the Sistine Chapel in Vatican Museums",
+        "Explore charming Trastevere neighborhood at night",
+        "Enjoy authentic Roman pasta: carbonara, cacio e pepe",
+        "Throw a coin in the baroque Trevi Fountain"
       ];
       alerts = [
-        "Summer months are extremely crowded",
-        "Book Vatican tickets online in advance",
-        "Many sites close on Mondays"
+        "Summer (June-August) is extremely hot and crowded",
+        "Book Vatican tickets online 2-3 weeks in advance",
+        "Many museums and sites close on Mondays",
+        "Dress code required for churches (covered shoulders/knees)"
+      ];
+      alternatives = [
+        { name: "Florence", country: "Italy", matchScore: 95, highlight: "Renaissance art capital with Uffizi Gallery" },
+        { name: "Athens", country: "Greece", matchScore: 93, highlight: "Ancient history with Acropolis and Parthenon" }
       ];
     } else if (hasFood && hasCultural) {
-      destination = "Bangkok, Thailand";
-      reason = "A food lover's paradise with rich cultural heritage and amazing street food scene.";
+      destination = "Bangkok";
+      country = "Thailand";
+      description = "A vibrant metropolis where golden temples meet world-famous street food and bustling markets.";
+      whyThisLocation = "Bangkok is perfect for your food and cultural interests. Experience one of the world's best street food scenes alongside ornate temples, floating markets, and the famous Thai hospitality.";
+      matchScore = 96;
+      bestSeason = "November - February";
+      suggestedDates = formData.startDate ? new Date(formData.startDate).toLocaleDateString() : "December - February (Cool Season)";
+      lat = 13.7563;
+      lng = 100.5018;
       highlights = [
-        "Street food tour in Chinatown",
-        "Visit the Grand Palace and temples",
-        "Take a cooking class",
-        "Explore floating markets",
-        "Experience rooftop bars"
+        "Street food tour in legendary Chinatown (Yaowarat Road)",
+        "Visit the Grand Palace and Wat Phra Kaew temple complex",
+        "Take an authentic Thai cooking class",
+        "Explore Damnoen Saduak floating market",
+        "Experience rooftop bars with stunning city views"
       ];
       alerts = [
-        "Avoid rainy season (July-October)",
-        "Dress modestly when visiting temples",
-        "Try to learn basic Thai phrases"
+        "Avoid rainy season (July-October) - frequent flooding",
+        "Dress modestly when visiting temples (long pants, covered shoulders)",
+        "Be cautious of common tourist scams",
+        "Learn basic Thai phrases for better interactions"
+      ];
+      alternatives = [
+        { name: "Hanoi", country: "Vietnam", matchScore: 94, highlight: "Amazing street food and French colonial architecture" },
+        { name: "Penang", country: "Malaysia", matchScore: 92, highlight: "UNESCO food capital with diverse cuisine" }
       ];
     } else if (hasRoadTrip) {
-      destination = "Iceland";
-      reason = "Perfect for adventure seekers with stunning landscapes and the famous Ring Road.";
+      destination = "Reykjavík";
+      country = "Iceland";
+      description = "Land of fire and ice, with dramatic landscapes, geothermal wonders, and the famous Ring Road.";
+      whyThisLocation = "Iceland is ideal for road trip enthusiasts. The Ring Road offers breathtaking landscapes around every turn - from waterfalls and glaciers to volcanic black sand beaches and the Northern Lights.";
+      matchScore = 97;
+      bestSeason = "June - August (Summer), September - March (Northern Lights)";
+      suggestedDates = formData.startDate ? new Date(formData.startDate).toLocaleDateString() : "July - August (Midnight Sun)";
+      lat = 64.1466;
+      lng = -21.9426;
       highlights = [
-        "Drive the Golden Circle route",
-        "Chase the Northern Lights",
-        "Relax in natural hot springs",
-        "Explore black sand beaches",
-        "Visit ice caves and glaciers"
+        "Drive the legendary Golden Circle route (Geysir, Gullfoss)",
+        "Chase the magical Northern Lights (September-March)",
+        "Relax in natural hot springs like Blue Lagoon",
+        "Explore dramatic black sand beaches of Vík",
+        "Visit stunning ice caves and glaciers in Vatnajökull"
       ];
       alerts = [
-        "Summer has 24-hour daylight",
-        "Winter roads can be challenging",
-        "Book accommodations early for peak season"
+        "Summer (June-August) has 24-hour daylight - bring eye masks",
+        "Winter roads can be dangerous - 4WD recommended",
+        "Weather changes rapidly - pack layers",
+        "Book accommodations 3-6 months in advance"
+      ];
+      alternatives = [
+        { name: "Norway", country: "Scandinavia", matchScore: 95, highlight: "Fjords, Northern Lights, and scenic drives" },
+        { name: "New Zealand", country: "Oceania", matchScore: 93, highlight: "Diverse landscapes and adventure activities" }
       ];
     } else if (hasCity) {
-      destination = "Barcelona, Spain";
-      reason = "Vibrant city with stunning architecture, beaches, and incredible food scene.";
+      destination = "Barcelona";
+      country = "Spain";
+      description = "A vibrant coastal city blending Gaudí's surreal architecture with Mediterranean beaches and tapas culture.";
+      whyThisLocation = "Barcelona offers the perfect urban experience with its mix of stunning architecture, beach life, and world-class food. Explore Gaudí's masterpieces, enjoy Mediterranean cuisine, and soak up the lively Catalan culture.";
+      matchScore = 96;
+      bestSeason = "May - June, September - October";
+      suggestedDates = formData.startDate ? new Date(formData.startDate).toLocaleDateString() : "May - June (Late Spring)";
+      lat = 41.3874;
+      lng = 2.1686;
       highlights = [
-        "Visit Sagrada Familia and Park Güell",
-        "Stroll down Las Ramblas",
-        "Relax at Barceloneta Beach",
-        "Try tapas in Gothic Quarter",
-        "Watch sunset from Bunkers del Carmel"
+        "Visit the iconic Sagrada Familia and Park Güell",
+        "Stroll down the famous Las Ramblas boulevard",
+        "Relax at Barceloneta Beach with beach bars",
+        "Try authentic tapas and vermouth in Gothic Quarter",
+        "Watch sunset from Bunkers del Carmel with panoramic views"
       ];
       alerts = [
-        "Pickpockets common in tourist areas",
+        "Pickpockets very common in tourist areas - stay vigilant",
         "Many shops close for siesta (2-5 PM)",
-        "Book Sagrada Familia tickets weeks ahead"
+        "Book Sagrada Familia tickets 2-4 weeks ahead online",
+        "Avoid visiting during August - very hot and crowded"
+      ];
+      alternatives = [
+        { name: "Lisbon", country: "Portugal", matchScore: 94, highlight: "Hills, trams, and coastal charm" },
+        { name: "Valencia", country: "Spain", matchScore: 92, highlight: "Beach city with futuristic architecture" }
       ];
     } else {
-      destination = "Seattle, USA";
-      reason = "Great all-around destination with nature, culture, and food in perfect balance.";
+      destination = "Seattle";
+      country = "USA";
+      description = "The Emerald City, where urban sophistication meets stunning natural beauty and coffee culture.";
+      whyThisLocation = "Seattle offers a perfect blend of city attractions and outdoor adventures. Experience world-class coffee culture, innovative food scene, iconic landmarks, and easy access to mountains and water.";
+      matchScore = 95;
+      bestSeason = "June - September";
+      suggestedDates = formData.startDate ? new Date(formData.startDate).toLocaleDateString() : "July - August (Summer)";
+      lat = 47.6062;
+      lng = -122.3321;
       highlights = [
-        "Explore Pike Place Market",
-        "Visit Space Needle and Chihuly Garden",
-        "Take a ferry to nearby islands",
-        "Coffee culture tour",
-        "Hiking in nearby mountains"
+        "Explore the bustling Pike Place Market and watch fish flying",
+        "Visit the Space Needle and stunning Chihuly Garden and Glass",
+        "Take a scenic ferry to Bainbridge Island",
+        "Coffee culture tour - birthplace of Starbucks",
+        "Hiking in nearby Mount Rainier or Olympic National Park"
       ];
       alerts = [
-        "Rainy season October to May",
-        "Downtown parking can be expensive",
-        "Book popular restaurants in advance"
+        "Rainy season October to May - pack waterproof layers",
+        "Downtown parking is expensive - use public transit",
+        "Book popular restaurants (especially seafood) in advance",
+        "Summers are mild but can be overcast"
+      ];
+      alternatives = [
+        { name: "Portland", country: "USA", matchScore: 93, highlight: "Food trucks, coffee, and quirky culture" },
+        { name: "Vancouver", country: "Canada", matchScore: 92, highlight: "City surrounded by mountains and ocean" }
       ];
     }
   } else {
     // User provided destination - generate generic but relevant content
-    reason = `Based on your budget of $${formData.budget.toLocaleString()} and ${formData.duration} days, this is an excellent choice for your travel style.`;
+    destination = formData.destination;
+    country = "Custom Destination";
+    description = "Your chosen destination offers unique experiences and attractions.";
+    whyThisLocation = `Based on your budget of $${formData.budget.toLocaleString()} and ${formData.duration} days, this is an excellent choice for your travel style and preferences.`;
+    matchScore = 90;
+    bestSeason = "Year-round";
+    suggestedDates = formData.startDate ? new Date(formData.startDate).toLocaleDateString() : "Flexible dates";
+    lat = 0;
+    lng = 0;
     highlights = [
       `Explore top attractions in ${destination}`,
       "Experience local cuisine and culture",
@@ -128,11 +218,28 @@ const generateRecommendation = (formData: TravelFormData) => {
     ];
   }
 
+  // Calculate travel style matches
+  const travelStyles = [
+    { name: "Family-Friendly", score: formData.children > 0 ? 92 : 78 },
+    { name: "Adventure", score: formData.preferences.includes("roadtrip") ? 95 : 70 },
+    { name: "Cultural", score: formData.preferences.includes("cultural") ? 98 : 75 },
+    { name: "Relaxation", score: formData.preferences.includes("relaxed") ? 96 : 72 }
+  ].sort((a, b) => b.score - a.score).slice(0, 3);
+
   return {
     destination,
-    reason,
+    country,
+    description,
+    whyThisLocation,
+    matchScore,
+    bestSeason,
+    suggestedDates,
     highlights,
     alerts,
+    lat,
+    lng,
+    alternatives,
+    travelStyles,
     budgetBreakdown: {
       accommodation: Math.round(formData.budget * 0.4),
       food: Math.round(formData.budget * 0.25),
@@ -172,26 +279,16 @@ export const RecommendationPanel = ({
   return (
     <div className="space-y-4">
       {/* Destination Card */}
-      <Card className="glass-card rounded-3xl border-0 overflow-hidden">
-        <div className="bg-gradient-to-r from-primary to-accent p-6">
-          <div className="flex items-start justify-between">
-            <div>
-              <h2 className="text-3xl font-bold text-white mb-2">{recommendation.destination}</h2>
-              <div className="flex items-center gap-2 text-white/90">
-                <MapPin className="w-4 h-4" />
-                <span className="text-sm">Recommended Destination</span>
-              </div>
-            </div>
-            <Badge className="bg-white/20 text-white border-white/30">
-              <Star className="w-3 h-3 mr-1 fill-current" />
-              Perfect Match
-            </Badge>
-          </div>
-        </div>
-        <CardContent className="p-6">
-          <p className="text-foreground/80 leading-relaxed">{recommendation.reason}</p>
-        </CardContent>
-      </Card>
+      <DestinationCard 
+        destination={recommendation.destination}
+        country={recommendation.country}
+        description={recommendation.description}
+        whyThisLocation={recommendation.whyThisLocation}
+        matchScore={recommendation.matchScore}
+      />
+      
+      {/* Alternative Destinations */}
+      <AlternativeDestinations alternatives={recommendation.alternatives} />
 
       {/* Trip Details Grid */}
       <div className="grid gap-4 md:grid-cols-2">
@@ -216,48 +313,12 @@ export const RecommendationPanel = ({
           </CardContent>
         </Card>
 
-        <Card className="glass-card rounded-2xl border-0">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-lg">
-              <Calendar className="w-5 h-5 text-accent" />
-              Trip Overview
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-muted-foreground">Duration</span>
-              <span className="font-semibold">{formData.duration} days</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-muted-foreground">Travelers</span>
-              <span className="font-semibold">
-                {formData.adults} {formData.adults === 1 ? 'Adult' : 'Adults'}
-                {formData.children > 0 && `, ${formData.children} ${formData.children === 1 ? 'Child' : 'Children'}`}
-              </span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-muted-foreground">Start Date</span>
-              <span className="font-semibold">
-                {formData.startDate ? new Date(formData.startDate).toLocaleDateString() : 'Flexible'}
-              </span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-muted-foreground">Travel Style</span>
-              <div className="flex gap-1 flex-wrap justify-end">
-                {formData.preferences.slice(0, 2).map((pref) => (
-                  <Badge key={pref} variant="outline" className="text-xs">
-                    {pref}
-                  </Badge>
-                ))}
-                {formData.preferences.length > 2 && (
-                  <Badge variant="outline" className="text-xs">
-                    +{formData.preferences.length - 2}
-                  </Badge>
-                )}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <TripOverview 
+          duration={formData.duration}
+          bestSeason={recommendation.bestSeason}
+          suggestedDates={recommendation.suggestedDates}
+          travelStyles={recommendation.travelStyles}
+        />
       </div>
 
       {/* Trip Highlights */}
