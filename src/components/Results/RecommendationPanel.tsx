@@ -1,6 +1,7 @@
 import { TravelFormData } from "../TravelForm/TravelFormPage";
 import { DollarSign, AlertTriangle, Star, Sparkles } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { DestinationCard } from "./DestinationCard";
 import { AlternativeDestinations } from "./AlternativeDestinations";
 import { TripOverview } from "./TripOverview";
@@ -53,7 +54,10 @@ const generateRecommendation = (formData: TravelFormData) => {
         "Best weather November to April (dry season)",
         "Book luxury resorts 4-6 months in advance",
         "Some islands require seaplane transfers (additional cost)",
-        "Alcohol only available at resort islands"
+        "Alcohol only available at resort islands",
+        "Ensure passport is valid for at least 6 months beyond travel dates",
+        "US citizens: Check F-1 visa status before international travel",
+        "Carry copies of passport, visa, and I-20 documents"
       ];
       alternatives = [
         { name: "Bora Bora", country: "French Polynesia", matchScore: 96, highlight: "Similar luxury with overwater bungalows" },
@@ -143,7 +147,10 @@ const generateRecommendation = (formData: TravelFormData) => {
         "Summer (June-August) has 24-hour daylight - bring eye masks",
         "Winter roads can be dangerous - 4WD recommended",
         "Weather changes rapidly - pack layers",
-        "Book accommodations 3-6 months in advance"
+        "Book accommodations 3-6 months in advance",
+        "Passport must be valid for at least 3 months beyond departure from Schengen Area",
+        "F-1 visa holders: Verify travel signature on I-20 before departure",
+        "Register with STEP (Smart Traveler Enrollment Program) for US citizens"
       ];
       alternatives = [
         { name: "Norway", country: "Scandinavia", matchScore: 95, highlight: "Fjords, Northern Lights, and scenic drives" },
@@ -173,7 +180,10 @@ const generateRecommendation = (formData: TravelFormData) => {
         "Pickpockets very common in tourist areas - stay vigilant",
         "Many shops close for siesta (2-5 PM)",
         "Book Sagrada Familia tickets 2-4 weeks ahead online",
-        "Avoid visiting during August - very hot and crowded"
+        "Avoid visiting during August - very hot and crowded",
+        "Valid passport required for entry to Schengen Area",
+        "Students on F-1 visa: Ensure I-20 has current travel signature",
+        "Carry prescription medications in original containers with documentation"
       ];
       alternatives = [
         { name: "Lisbon", country: "Portugal", matchScore: 94, highlight: "Hills, trams, and coastal charm" },
@@ -203,7 +213,10 @@ const generateRecommendation = (formData: TravelFormData) => {
         "Rainy season October to May - pack waterproof layers",
         "Downtown parking is expensive - use public transit",
         "Book popular restaurants (especially seafood) in advance",
-        "Summers are mild but can be overcast"
+        "Summers are mild but can be overcast",
+        "ID required for all domestic travel - bring valid driver's license or passport",
+        "International students: Keep I-20 and passport accessible for potential checks",
+        "TSA PreCheck recommended for faster security screening"
       ];
       alternatives = [
         { name: "Portland", country: "USA", matchScore: 93, highlight: "Food trucks, coffee, and quirky culture" },
@@ -234,7 +247,10 @@ const generateRecommendation = (formData: TravelFormData) => {
     alerts = [
       "Check visa requirements before booking",
       "Research local customs and etiquette",
-      "Book accommodations well in advance"
+      "Book accommodations well in advance",
+      "Ensure passport validity for at least 6 months",
+      "F-1 students: Carry valid I-20 and all immigration documents",
+      "Register travel plans with local embassy if traveling to high-risk areas"
     ];
   }
 
@@ -270,10 +286,12 @@ const generateRecommendation = (formData: TravelFormData) => {
 
 export const RecommendationPanel = ({ 
   formData, 
-  isGenerating 
+  isGenerating,
+  onCompareServices 
 }: { 
   formData: TravelFormData;
   isGenerating: boolean;
+  onCompareServices?: () => void;
 }) => {
   if (isGenerating) {
     return (
@@ -401,6 +419,26 @@ export const RecommendationPanel = ({
           </ul>
         </CardContent>
       </Card>
+
+      {/* Travel Service Comparison Button */}
+      {onCompareServices && (
+        <Card className="glass-card rounded-2xl border-0 bg-gradient-to-r from-primary/5 to-accent/5">
+          <CardContent className="p-6 text-center">
+            <h3 className="text-xl font-bold mb-2">Ready to Book?</h3>
+            <p className="text-muted-foreground mb-4">
+              Compare travel services and find the best deals for your trip
+            </p>
+            <Button 
+              onClick={onCompareServices}
+              size="lg"
+              className="gap-2"
+            >
+              <Sparkles className="w-5 h-5" />
+              Compare Travel Services
+            </Button>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 };

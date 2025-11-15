@@ -3,7 +3,7 @@ import { RecommendationPanel } from "./RecommendationPanel";
 import { GoogleMapPanel } from "./GoogleMapPanel";
 import { TravelFormData } from "../TravelForm/TravelFormPage";
 import { Button } from "@/components/ui/button";
-import { RefreshCw, Download, ArrowLeft } from "lucide-react";
+import { RefreshCw, Download, ArrowLeft, Calendar } from "lucide-react";
 import beachBg from "@/assets/beach-bg.jpg";
 import { toast } from "sonner";
 
@@ -87,11 +87,13 @@ const getDestinationPlaces = (formData: TravelFormData) => {
 export const ResultsPage = ({ 
   formData, 
   onBack,
-  onRegenerate 
+  onRegenerate,
+  onCompareServices
 }: { 
   formData: TravelFormData;
   onBack: () => void;
   onRegenerate: () => void;
+  onCompareServices?: () => void;
 }) => {
   const [isGenerating, setIsGenerating] = useState(true);
   const [currentDestinationData, setCurrentDestinationData] = useState<{
@@ -111,6 +113,26 @@ export const ResultsPage = ({
 
   const handleExportPDF = () => {
     toast.success("PDF export coming soon! 📄");
+  };
+
+  const handleExportToGoogleCalendar = () => {
+    const destination = currentDestinationData?.destination || formData.destination || "Your Trip";
+    const startDate = formData.startDate ? new Date(formData.startDate) : new Date();
+    const endDate = new Date(startDate);
+    endDate.setDate(endDate.getDate() + formData.duration);
+
+    const formatDate = (date: Date) => {
+      return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+    };
+
+    const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE` +
+      `&text=${encodeURIComponent(`Trip to ${destination}`)}` +
+      `&dates=${formatDate(startDate)}/${formatDate(endDate)}` +
+      `&details=${encodeURIComponent(`Travel to ${destination} - Budget: $${formData.budget}`)}` +
+      `&location=${encodeURIComponent(destination)}`;
+
+    window.open(calendarUrl, '_blank');
+    toast.success("Opening Google Calendar...");
   };
 
   return (
@@ -149,6 +171,14 @@ export const ResultsPage = ({
               Regenerate
             </Button>
             <Button
+              onClick={handleExportToGoogleCalendar}
+              variant="outline"
+              className="gap-2 rounded-xl"
+            >
+              <Calendar className="w-4 h-4" />
+              Google Calendar
+            </Button>
+            <Button
               onClick={handleExportPDF}
               variant="outline"
               className="gap-2 rounded-xl"
@@ -164,7 +194,11 @@ export const ResultsPage = ({
       <div className="flex gap-4 p-4 h-[calc(100vh-120px)]">
         {/* Left Column - AI Recommendations */}
         <div className="flex-1 overflow-y-auto">
-          <RecommendationPanel formData={formData} isGenerating={isGenerating} />
+          <RecommendationPanel 
+            formData={formData} 
+            isGenerating={isGenerating}
+            onCompareServices={onCompareServices}
+          />
         </div>
 
         {/* Right Column - Map */}
